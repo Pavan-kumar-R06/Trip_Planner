@@ -322,6 +322,54 @@ export function getDestination(slug: string): Destination | undefined {
   return destinations.find((d) => d.slug === slug)
 }
 
+// Build a day-wise plan for any number of days while keeping the
+// arrival day first and the departure day last. Middle days reuse the
+// destination's predefined exploration days, then fall back to a generated
+// leisure day so nothing repeats the "Arrival" entry.
+export function buildItinerary(destination: Destination, numDays: number): ItineraryDay[] {
+  const base = destination.itinerary
+  if (numDays <= 0) return []
+  if (numDays === 1) return [base[0]]
+  if (numDays <= base.length) {
+    // Take the first (arrival) and last (departure) plus middle days.
+    const middleCount = numDays - 2
+    const middle = base.slice(1, 1 + middleCount)
+    return [base[0], ...middle, base[base.length - 1]]
+  }
+
+  // More days requested than predefined: keep arrival + all middle days,
+  // pad with leisure days, then close with the departure day.
+  const arrival = base[0]
+  const departure = base[base.length - 1]
+  const middleDays = base.slice(1, base.length - 1)
+  const result: ItineraryDay[] = [arrival, ...middleDays]
+
+  const leisureTemplates: ItineraryDay[] = [
+    {
+      title: "Leisure & Hidden Gems",
+      activities: ["Relaxed breakfast", "Explore local markets", "Visit a lesser-known viewpoint"],
+      attractions: destination.attractions.slice(0, 2).map((a) => a.name),
+      meals: "Breakfast & lunch",
+      estimatedExpense: Math.round(destination.baseBudget * 0.85),
+    },
+    {
+      title: "Culture & Local Cuisine",
+      activities: ["Heritage walk", "Authentic local food trail", "Evening leisure"],
+      attractions: destination.attractions.slice(2, 4).map((a) => a.name),
+      meals: "Breakfast & dinner",
+      estimatedExpense: Math.round(destination.baseBudget * 0.9),
+    },
+  ]
+
+  let pad = 0
+  while (result.length < numDays - 1) {
+    result.push(leisureTemplates[pad % leisureTemplates.length])
+    pad++
+  }
+  result.push(departure)
+  return result
+}
+
 export interface BudgetBreakdown {
   accommodation: number
   food: number

@@ -27,6 +27,7 @@ import {
   travelCategories,
   dayOptions,
   calculateBudget,
+  buildItinerary,
   formatINR,
   type TravelCategory,
 } from "@/lib/data"
@@ -52,11 +53,11 @@ export function TripPlanner() {
     [destination, numDays, category],
   )
 
-  // Build day-wise plan by cycling through predefined itinerary days
-  const itinerary = useMemo(() => {
-    const base = destination.itinerary
-    return Array.from({ length: numDays }, (_, i) => base[i % base.length])
-  }, [destination, numDays])
+  // Build day-wise plan keeping arrival first and departure last
+  const itinerary = useMemo(
+    () => buildItinerary(destination, numDays),
+    [destination, numDays],
+  )
 
   return (
     <>
