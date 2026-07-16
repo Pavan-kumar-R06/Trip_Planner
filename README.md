@@ -1,33 +1,94 @@
-# smart-trip-planning
+# 🌍 Smart Trip Planning
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [v0](https://v0.app).
+**Live Demo:** https://smart-trip-planning.vercel.app/
 
-## Built with v0
+Smart Trip Planning is a modern AI-powered travel planning application built with **Next.js**. It helps users create personalized travel itineraries, discover destinations, and plan trips efficiently through an intuitive and responsive interface.
 
-This repository is linked to a [v0](https://v0.app) project. You can continue developing by visiting the link below -- start new chats to make changes, and v0 will push commits directly to this repo. Every merge to `main` will automatically deploy.
+---
 
-[Continue working on v0 →](https://v0.app/chat/projects/prj_O4MmbvrDqVCz7IVQ9kmCMF5MUEyj)
+## ✨ Features
 
-## Getting Started
+* 🗺️ Smart trip planning
+* 📍 Personalized itinerary generation
+* 📅 Day-wise travel schedule
+* 📱 Fully responsive design
+* ⚡ Fast performance with Next.js
+* 🎨 Modern and user-friendly interface
 
-First, run the development server:
+---
+
+## 🛠️ Tech Stack
+
+* **Framework:** Next.js
+* **Language:** TypeScript
+* **Styling:** Tailwind CSS
+* **Deployment:** Vercel
+
+---
+
+## 🚀 Live Demo
+
+Visit the application here:
+
+**https://smart-trip-planning.vercel.app/**
+
+---
+
+## 📦 Getting Started
+
+Clone the repository:
+
+```bash
+git clone <your-repository-url>
+```
+
+Move into the project directory:
+
+```bash
+cd smart-trip-planning
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open your browser and visit:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+http://localhost:3000
+```
 
-## Learn More
+---
 
-To learn more, take a look at the following resources:
+## 📂 Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [v0 Documentation](https://v0.app/docs) - learn about v0 and how to use it.
+```
+app/
+components/
+public/
+styles/
+lib/
+```
+
+---
+
+## 🚀 Deployment
+
+The project is deployed on **Vercel**.
+
+Live URL:
+https://smart-trip-planning.vercel.app/
+
+---
+
+## 📄 License
+
+This project is intended for educational and personal learning purposes.
