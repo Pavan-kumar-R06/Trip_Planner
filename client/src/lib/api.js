@@ -1,14 +1,18 @@
-const API_BASE = import.meta.env.VITE_API_URL || "https://trip-planner-git-main-pavankumar060905-8109s-projects.vercel.app";
+const API_BASE =
+  import.meta.env.VITE_API_URL ||
+  "https://trip-planner-six-pi.vercel.app/api";
 
 async function request(path, options) {
   const res = await fetch(`${API_BASE}${path}`, {
     headers: { "Content-Type": "application/json" },
     ...options,
   });
+
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
     throw new Error(body.message || `Request failed: ${res.status}`);
   }
+
   return res.json();
 }
 
