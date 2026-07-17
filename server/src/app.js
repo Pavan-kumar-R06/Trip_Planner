@@ -11,20 +11,26 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "http://127.0.0.1:5173",
-  "https://trip-planner-fsdn-git-main-pavankumar060905-8109s-projects.vercel.app",
-  "https://trip-planner-qb1t-git-main-pavankumar060905-8109s-projects.vercel.app",
   process.env.CLIENT_ORIGIN,
 ].filter(Boolean);
 
-
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
+    origin(origin, callback) {
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
       }
+
+      if (
+        origin.endsWith(".vercel.app") &&
+        origin.includes("trip-planner-fsdn")
+      ) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
   })
