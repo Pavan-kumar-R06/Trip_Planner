@@ -1,11 +1,18 @@
-const API_BASE =
-  import.meta.env.VITE_API_URL ||
-  "https://trip-planner-git-main-pavankumar060905-8109s-projects.vercel.app/";
+const API_BASE = (import.meta.env.VITE_API_URL || "https://trip-planner-qb1t-git-main-pavankumar060905-8109s-projects.vercel.app").replace(/\/$/, "");
+console.log("API_BASE =", API_BASE);
+async function request(path, options = {}) {
+  const headers = {};
 
-async function request(path, options) {
-  const res = await fetch(`${API_BASE}${path}`, {
-    headers: { "Content-Type": "application/json" },
+  if (options.body) {
+    headers["Content-Type"] = "application/json";
+  }
+
+  const res = await fetch(`${API_BASE}/api${path}`, {
     ...options,
+    headers: {
+      ...headers,
+      ...(options.headers || {}),
+    },
   });
 
   if (!res.ok) {

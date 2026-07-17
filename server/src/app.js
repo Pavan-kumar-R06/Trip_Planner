@@ -11,8 +11,8 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "http://127.0.0.1:5173",
-  "https://trip-planner-68u4.vercel.app",
-  "https://trip-planner-68u4-git-main-pavankumar060905-8109s-projects.vercel.app",
+  "https://trip-planner-fsdn-git-main-pavankumar060905-8109s-projects.vercel.app",
+  "https://trip-planner-qb1t-git-main-pavankumar060905-8109s-projects.vercel.app",
   process.env.CLIENT_ORIGIN,
 ].filter(Boolean);
 
