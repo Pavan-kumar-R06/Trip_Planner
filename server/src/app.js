@@ -14,27 +14,16 @@ const allowedOrigins = [
   process.env.CLIENT_ORIGIN,
 ].filter(Boolean);
 
+const cors = require("cors");
+
 app.use(
   cors({
-    origin(origin, callback) {
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-
-      if (
-        origin.endsWith(".vercel.app") &&
-        origin.includes("trip-planner-fsdn")
-      ) {
-        return callback(null, true);
-      }
-
-      return callback(new Error("Not allowed by CORS"));
-    },
+    origin: true,
     credentials: true,
   })
 );
+
+app.options("*", cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
