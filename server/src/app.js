@@ -7,6 +7,12 @@ const authRouter = require("./routes/auth");
 const usersRouter = require("./routes/users");
 
 const app = express();
+app.get("/api/debug", (req, res) => {
+  res.json({
+    hasMongoURI: !!process.env.MONGODB_URI,
+    mongoPrefix: process.env.MONGODB_URI?.substring(0, 20),
+  });
+});
 
 app.use(cors({ origin: process.env.CLIENT_ORIGIN || "http://localhost:5173" }));
 app.use(express.json());
