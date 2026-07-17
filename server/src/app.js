@@ -14,7 +14,7 @@ const allowedOrigins = [
   process.env.CLIENT_ORIGIN,
 ].filter(Boolean);
 
-const cors = require("cors");
+
 
 app.use(
   cors({
