@@ -1,6 +1,6 @@
 const API_BASE =
   import.meta.env.VITE_API_URL ||
-  "https://trip-planner-six-pi.vercel.app/api";
+  "https://trip-planner-git-main-pavankumar060905-8109s-projects.vercel.app/";
 
 async function request(path, options) {
   const res = await fetch(`${API_BASE}${path}`, {
