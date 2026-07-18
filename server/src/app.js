@@ -22,10 +22,7 @@ app.options("*", cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.json({ 
-    message: "🚀 Trip Planner API is running successfully!",
-    status: "healthy"
-  });
+  res.redirect("https://trip-planner-yu5f-git-main-pavankumar060905-8109s-projects.vercel.app");
 });
 
 app.get("/api/health", (_req, res) => res.json({ status: "ok" }));
