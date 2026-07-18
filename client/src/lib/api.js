@@ -1,4 +1,4 @@
-const API_BASE = (import.meta.env.VITE_API_URL || "https://trip-planner-git-main-pavankumar060905-8109s-projects.vercel.app").replace(/\/$/, "");
+const API_BASE = (import.meta.env.VITE_API_URL || "https://trip-planner-ug1t-git-main-pavankumar060905-8109s-projects.vercel.app").replace(/\/$/, "");
 console.log("API_BASE =", API_BASE);
 async function request(path, options = {}) {
   const headers = {};
