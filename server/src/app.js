@@ -8,19 +8,18 @@ const usersRouter = require("./routes/users");
 
 const app = express();
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "http://127.0.0.1:5173",
-  process.env.CLIENT_ORIGIN,
-].filter(Boolean);
 
 
-
-app.use(cors({
-  origin: 'https://trip-planner-68u4.vercel.app', // Allow your frontend domain
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 app.options("*", cors());
 app.use(express.json());
