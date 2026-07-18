@@ -22,7 +22,7 @@ app.options("*", cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.redirect("https://vercel.com/pavankumar060905-8109s-projects/trip-planner-68u4/7emTHfQbaiDTECKdrJogKAtP62Ya");
+  res.redirect("https://trip-planner-fsdn-git-main-pavankumar060905-8109s-projects.vercel.app");
 });
 
 app.get("/api/health", (_req, res) => res.json({ status: "ok" }));
