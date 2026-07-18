@@ -16,12 +16,11 @@ const allowedOrigins = [
 
 
 
-app.use(
-  cors({
-    origin: true,
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: 'https://trip-planner-68u4.vercel.app', // Allow your frontend domain
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 
 app.options("*", cors());
 app.use(express.json());
