@@ -238,7 +238,7 @@ export default function AdminPage({ currentUser }) {
           <div className="rounded-3xl border border-border/70 bg-card p-6 shadow-sm">
             <h2 className="text-xl font-semibold text-foreground">User trip submissions</h2>
             <div className="mt-4 space-y-3">
-              {trips.map((trip) => (
+              {trips.slice(0, 5).map((trip) => (
                 <div key={trip._id} className="rounded-2xl border border-border/70 p-4">
                   <p className="font-semibold text-foreground">{trip.destinationName}</p>
                   <p className="text-sm text-muted-foreground">Traveler: {trip.travelerName || "Guest"} • {trip.days} days • {trip.category}</p>

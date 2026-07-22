@@ -8,6 +8,7 @@ import DestinationsPage from "@/pages/Destinations";
 import DestinationDetailPage from "@/pages/DestinationDetail";
 import PlannerPage from "@/pages/Planner";
 import CalculatorPage from "@/pages/Calculator";
+import ScrollToTop from "@/lib/ScrollToTop";
 import DashboardPage from "@/pages/Dashboard";
 import AboutPage from "@/pages/About";
 import NotFoundPage from "@/pages/NotFound";
@@ -64,19 +65,17 @@ export default function App() {
   return (
     <>
       <Navbar currentUser={currentUser} onLogout={authContext.logout} />
+      <ScrollToTop />
       <main className="min-h-screen">
-        <div
-          key={location.pathname}
-          className="animate-[fadeIn_0.25s_ease-out]"
-          style={{ animationName: navigationType === "POP" ? "none" : "fadeIn" }}
-        >
+        <div className="animate-[fadeIn_0.25s_ease-out]">
           <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/destinations" element={<DestinationsPage />} />
           <Route path="/destinations/:slug" element={<DestinationDetailPage />} />
-          <Route path="/planner" element={<PlannerPage />} />
-          <Route path="/calculator" element={<CalculatorPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/planner" element={<PlannerPage currentUser={currentUser} />} />
+          <Route path="/calculator" element={<CalculatorPage currentUser={currentUser} />} />
+          {/* <Route path="/dashboard" element={<DashboardPage />} /> */}
+          <Route path="/dashboard" element={<DashboardPage currentUser={currentUser} />}/>
           <Route path="/about" element={<AboutPage />} />
           <Route path="/auth" element={<AuthPage onAuthSuccess={authContext.login} currentUser={currentUser} />} />
           <Route path="/admin" element={<AdminPage currentUser={currentUser} />} />

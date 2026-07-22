@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import {
   MapPin,
   CalendarDays,
@@ -24,7 +24,7 @@ import { api } from "@/lib/api";
 import { formatINR } from "@/lib/format";
 import { useToast } from "@/components/toast-provider";
 
-export default function PlannerPage() {
+export default function PlannerPage({ currentUser }) {
   const [searchParams] = useSearchParams();
 
   const [destinations, setDestinations] = useState([]);
@@ -39,6 +39,7 @@ export default function PlannerPage() {
   const [budget, setBudget] = useState(null);
   const [saved, setSaved] = useState(false);
   const { addToast } = useToast();
+  const navigate = useNavigate();
 
   // Load destination list + planner options once, then settle on an initial destination.
   useEffect(() => {
@@ -57,22 +58,38 @@ export default function PlannerPage() {
     if (!destSlug) return;
     const numDays = Number(days) > 0 ? Number(days) : 4;
     setSaved(false);
+    const cacheKey = `itinerary:${destSlug}:${numDays}:${category}`;
+    const cached = api.getCached?.(cacheKey);
+    if (cached) {
+      setDestination(cached.destination);
+      setItinerary(cached.itinerary);
+      setBudget(cached.budget);
+      return;
+    }
+
     api.getItinerary(destSlug, numDays, category).then((res) => {
       setDestination(res.destination);
       setItinerary(res.itinerary);
       setBudget(res.budget);
     });
-  }, [destSlug, days, category]);
+  }, [destSlug, days, category, currentUser]);
 
   async function handleSaveTrip() {
     if (!destination || !budget) return;
+    if (!currentUser) {
+      addToast("Please sign in to save trips.", "info");
+      navigate(`/auth?next=/planner&dest=${encodeURIComponent(destSlug)}&days=${days}&category=${encodeURIComponent(category)}`);
+      return;
+    }
     try {
-      await api.saveTrip({
-        destinationSlug: destination.slug,
-        days: Number(days),
-        category,
-        totalBudget: budget.total,
-      });
+     await api.saveTrip({
+  userId: currentUser.id,
+  destinationSlug: destination.slug,
+  days: Number(days),
+  category,
+  travelerName: currentUser.name,
+  totalBudget: budget.total,
+});
       setSaved(true);
       addToast("Trip saved successfully.", "success");
     } catch (error) {
@@ -81,8 +98,12 @@ export default function PlannerPage() {
   }
 
   if (!destination || !budget || !options) {
-    return <div className="mx-auto max-w-7xl px-4 py-20 text-muted-foreground md:px-6">Loading your trip plan…</div>;
+    if (!options) {
+      return <div className="mx-auto max-w-7xl px-4 py-20 text-muted-foreground md:px-6">Loading your trip plan…</div>;
+    }
   }
+  
+  
 
   const numDays = Number(days);
 
@@ -142,14 +163,16 @@ export default function PlannerPage() {
         </div>
       </section>
 
+      {/* Anonymous users can view and generate plans; saving requires sign-in. */}
+
       {/* Travel summary card */}
       <section className="mx-auto max-w-7xl px-4 pt-12 md:px-6">
         <div className="overflow-hidden rounded-3xl border border-border/60 bg-card shadow-sm">
           <div className="grid md:grid-cols-5">
             <div className="relative md:col-span-2">
               <img
-                src={destination.image || "/placeholder.svg"}
-                alt={`Scenic view of ${destination.name}`}
+                src={destination?.image || "/placeholder.svg"}
+                alt={`Scenic view of ${destination?.name || "destination"}`}
                 className="h-56 w-full object-cover md:h-full"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent md:bg-gradient-to-r" />
@@ -160,15 +183,15 @@ export default function PlannerPage() {
                 Trip Summary
               </div>
               <h2 className="mt-2 text-2xl font-bold text-foreground">
-                {numDays}-Day {category} Trip to {destination.name}
+                {numDays}-Day {category} Trip to {destination?.name || "—"}
               </h2>
-              <p className="mt-2 leading-relaxed text-muted-foreground">{destination.description}</p>
+              <p className="mt-2 leading-relaxed text-muted-foreground">{destination?.description}</p>
 
               <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
                 <SummaryStat icon={<Clock className="h-4 w-4" />} label="Duration" value={`${numDays} days`} />
-                <SummaryStat icon={<Star className="h-4 w-4" />} label="Rating" value={`${destination.rating}/5`} />
-                <SummaryStat icon={<CalendarDays className="h-4 w-4" />} label="Best time" value={destination.bestTime} />
-                <SummaryStat icon={<Wallet className="h-4 w-4" />} label="Est. total" value={formatINR(budget.total)} />
+                <SummaryStat icon={<Star className="h-4 w-4" />} label="Rating" value={`${destination?.rating ?? "—"}/5`} />
+                <SummaryStat icon={<CalendarDays className="h-4 w-4" />} label="Best time" value={destination?.bestTime || "—"} />
+                <SummaryStat icon={<Wallet className="h-4 w-4" />} label="Est. total" value={formatINR(budget?.total || 0)} />
               </div>
 
               <button

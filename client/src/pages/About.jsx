@@ -5,22 +5,9 @@ import {
   CheckCircle2,
   Sparkles,
   Rocket,
-  Map,
   Wallet,
-  CalendarRange,
-  LayoutDashboard,
-  Globe2,
   ArrowRight,
 } from "lucide-react";
-
-const keyFeatures = [
-  { icon: Map, title: "India-first destination library", desc: "Explore curated Indian travel spots with clear highlights, ideal travel windows, and trip-ready descriptions." },
-  { icon: CalendarRange, title: "Flexible itinerary builder", desc: "Generate day-wise itineraries for different trip lengths and travel styles in seconds." },
-  { icon: Wallet, title: "Budget calculator", desc: "Compare travel styles and see a transparent breakdown of estimated costs before booking anything." },
-  { icon: LayoutDashboard, title: "Trip insights dashboard", desc: "Review saved trips, destination stats, and average spending in one place." },
-  { icon: Globe2, title: "Responsive experience", desc: "The interface feels polished whether you are planning on mobile, tablet, or desktop." },
-  { icon: Sparkles, title: "MERN-powered backend", desc: "Destinations, itineraries, trips, and auth are all connected through MongoDB, Express, React, and Node." },
-];
 
 const benefits = [
   "Helps travelers plan faster without jumping across multiple websites",
@@ -85,28 +72,7 @@ export default function AboutPage() {
           </Panel>
         </div>
 
-        {/* Key Features */}
-        <section className="mt-14">
-          <SectionHeading
-            icon={<Sparkles className="h-5 w-5" />}
-            title="Key Features"
-            subtitle="Everything needed to plan a complete trip in one place."
-          />
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {keyFeatures.map((f) => {
-              const Icon = f.icon;
-              return (
-                <div key={f.title} className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                    <Icon className="h-5 w-5" />
-                  </span>
-                  <h3 className="mt-4 font-bold text-foreground">{f.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{f.desc}</p>
-                </div>
-              );
-            })}
-          </div>
-        </section>
+        {/* Key Features removed per request */}
 
         {/* Benefits */}
         <section className="mt-14">

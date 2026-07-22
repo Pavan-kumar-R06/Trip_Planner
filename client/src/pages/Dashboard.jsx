@@ -4,17 +4,29 @@ import { Globe2, Users, Wallet, TrendingUp, MapPin, Star, ArrowRight, Plane } fr
 import { api } from "@/lib/api";
 import { formatINR } from "@/lib/format";
 
-export default function DashboardPage() {
+export default function DashboardPage({ currentUser }) {
   const [destinations, setDestinations] = useState([]);
   const [recentTrips, setRecentTrips] = useState([]);
   const [stats, setStats] = useState(null);
 
-  useEffect(() => {
-    api.getDestinations().then(setDestinations).catch(() => {});
-    api.getRecentTrips(5).then(setRecentTrips).catch(() => {});
-    api.getTripStats().then(setStats).catch(() => {});
-  }, []);
+  // useEffect(() => {
+  //   api.getDestinations().then(setDestinations).catch(() => {});
+  //   api.getRecentTrips(5).then(setRecentTrips).catch(() => {});
+  //   api.getTripStats().then(setStats).catch(() => {});
+  // }, []);
+useEffect(() => {
+  api.getDestinations().then(setDestinations).catch(() => {});
 
+  if (currentUser) {
+    api.getRecentTrips(currentUser.id, 5)
+      .then(setRecentTrips)
+      .catch(() => {});
+
+    api.getTripStats(currentUser.id)
+      .then(setStats)
+      .catch(() => {});
+  }
+}, [currentUser]);
   const topRated = [...destinations].sort((a, b) => b.rating - a.rating);
   const avgRating = destinations.length
     ? (destinations.reduce((sum, d) => sum + d.rating, 0) / destinations.length).toFixed(1)

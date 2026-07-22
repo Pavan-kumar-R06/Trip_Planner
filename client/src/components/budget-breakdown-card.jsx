@@ -9,14 +9,16 @@ const items = [
 ];
 
 export function BudgetBreakdownCard({ breakdown }) {
+  const safe = breakdown || { accommodation: 0, food: 0, transport: 0, sightseeing: 0, total: 0 };
+
   return (
     <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm">
       <h3 className="text-lg font-bold text-foreground">Estimated cost breakdown</h3>
 
       <div className="mt-5 space-y-4">
         {items.map((item) => {
-          const value = breakdown[item.key];
-          const pct = Math.round((value / breakdown.total) * 100);
+          const value = safe[item.key] || 0;
+          const pct = safe.total ? Math.round((value / safe.total) * 100) : 0;
           const Icon = item.icon;
           return (
             <div key={item.key}>
@@ -41,7 +43,7 @@ export function BudgetBreakdownCard({ breakdown }) {
 
       <div className="mt-6 flex items-center justify-between rounded-xl bg-primary px-5 py-4 text-primary-foreground">
         <span className="font-semibold">Total estimated cost</span>
-        <span className="text-2xl font-bold">{formatINR(breakdown.total)}</span>
+        <span className="text-2xl font-bold">{formatINR(safe.total)}</span>
       </div>
     </div>
   );

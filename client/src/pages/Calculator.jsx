@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import { MapPin, CalendarDays, Compass, Minus, Plus } from "lucide-react";
 import {
   Select,
@@ -12,8 +12,10 @@ import { BudgetBreakdownCard } from "@/components/budget-breakdown-card";
 import { api } from "@/lib/api";
 import { formatINR } from "@/lib/format";
 
-export default function CalculatorPage() {
+export default function CalculatorPage({ currentUser }) {
   const [searchParams] = useSearchParams();
+
+  // anonymous users may use the calculator; no auth required to generate estimates
 
   const [destinations, setDestinations] = useState([]);
   const [options, setOptions] = useState(null);
@@ -40,18 +42,29 @@ export default function CalculatorPage() {
 
   useEffect(() => {
     if (!destSlug) return;
+    const cacheKey = `budget:${destSlug}:${days}:${category}`;
+    const cached = api.getCached?.(cacheKey);
+    if (cached) {
+      setDestination(cached.destination);
+      setBreakdown(cached.breakdown);
+      setComparison(cached.comparison);
+      return;
+    }
+
     api.getBudget(destSlug, days, category).then((res) => {
       setDestination(res.destination);
       setBreakdown(res.breakdown);
       setComparison(res.comparison);
     });
-  }, [destSlug, days, category]);
+  }, [destSlug, days, category, currentUser]);
 
-  if (!destination || !breakdown || !options) {
+  if (!options) {
     return <div className="mx-auto max-w-7xl px-4 py-20 text-muted-foreground md:px-6">Loading calculator…</div>;
   }
 
   const maxTotal = Math.max(...comparison.map((c) => c.total));
+
+  const safeMaxTotal = comparison.length ? maxTotal : 1;
 
   return (
     <>
@@ -68,6 +81,7 @@ export default function CalculatorPage() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-12 md:px-6">
+        {/* Calculator usable by anonymous users; sign-in only required for saving trips */}
         <div className="grid gap-8 lg:grid-cols-2">
           {/* Inputs */}
           <div className="space-y-5">
@@ -160,7 +174,7 @@ export default function CalculatorPage() {
                     <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-secondary">
                       <div
                         className="h-full rounded-full bg-primary transition-all"
-                        style={{ width: `${Math.round((c.total / maxTotal) * 100)}%` }}
+                        style={{ width: `${Math.round((c.total / safeMaxTotal) * 100)}%` }}
                       />
                     </div>
                   </div>
@@ -171,10 +185,10 @@ export default function CalculatorPage() {
 
           {/* Result */}
           <div>
-            <div className="sticky top-24">
+              <div className="sticky top-24">
               <BudgetBreakdownCard breakdown={breakdown} />
               <p className="mt-4 text-center text-xs text-muted-foreground">
-                Estimates for {days}-day {category.toLowerCase()} trip to {destination.name}. Data served live from MongoDB.
+                Estimates for {days}-day {category.toLowerCase()} trip to {destination?.name || "destination"}. Data served live from MongoDB.
               </p>
             </div>
           </div>
