@@ -4,7 +4,7 @@
 
 ## 🚀 Live Demo
 
-**🌐 https://trip-planner-68u4-mb965swv0-pavankumar060905-8109s-projects.vercel.app/**
+**🌐 https://trip-planner-68u4-git-main-pavankumar060905-8109s-projects.vercel.app/**
 
 ---
 
